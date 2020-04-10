@@ -1,15 +1,16 @@
 #!/usr/bin/env php
 <?php
 
-require_once __DIR__ . '/../vendor/autoload.php';
+$container = require_once __DIR__ . '/../etc/bootstrap.php';
 
 // Init App with name and version
-$app = new Ahc\Cli\Application('App', 'v0.0.1');
+/** @var \Ahc\Cli\Application $app */
+$app = $container->get(\Ahc\Cli\Application::class);
 
-// Add commands with optional aliases`
-$app->add(new App\Command\Init(), 'i');
+/** @var \Ahc\Cli\Input\Command[] $commands */
+$commands = $container->get('commands');
+foreach ($commands as $alias => $command) {
+    $app->add($command, is_string($alias) ? $alias : '');
+}
 
-// Set logo
-$app->logo('Ascii art logo of your app');
-
-$app->handle($_SERVER['argv']); // if argv[1] is `i` or `init` it executes InitCommand
+$app->handle($_SERVER['argv']);

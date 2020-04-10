@@ -1,4 +1,4 @@
 /vendor/
-/vendor-bin/
+/vendor-bin/**/vendor
 /m2-cli
 *.phar
