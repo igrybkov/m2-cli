@@ -1,0 +1,15 @@
+#!/usr/bin/env php
+<?php
+
+require_once __DIR__ . '/../vendor/autoload.php';
+
+// Init App with name and version
+$app = new Ahc\Cli\Application('App', 'v0.0.1');
+
+// Add commands with optional aliases`
+$app->add(new App\Command\Init(), 'i');
+
+// Set logo
+$app->logo('Ascii art logo of your app');
+
+$app->handle($_SERVER['argv']); // if argv[1] is `i` or `init` it executes InitCommand
