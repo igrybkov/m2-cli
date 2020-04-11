@@ -28,6 +28,7 @@ class ConsoleCommandPass implements CompilerPassInterface
     {
         $consoleCommandsIds = $container->findTaggedServiceIds('console.command');
         $configurator = new \Symfony\Component\DependencyInjection\Reference(HideBuiltInConsoleCommands::class);
+        /** @var string $consoleCommandsId */
         foreach (array_keys($consoleCommandsIds) as $consoleCommandsId) {
             if (!$container->getDefinition($consoleCommandsId)->hasTag('app.command')) {
                 $container->getDefinition($consoleCommandsId)->setConfigurator($configurator);
@@ -42,6 +43,7 @@ class ConsoleCommandPass implements CompilerPassInterface
     {
         $configurableCommands = $container->findTaggedServiceIds('app.configurable_command');
         $configurator = new \Symfony\Component\DependencyInjection\Reference(ApplyCommandConfigurators::class);
+        /** @var string $configurableCommandId */
         foreach (array_keys($configurableCommands) as $configurableCommandId) {
             $container->getDefinition($configurableCommandId)->setConfigurator($configurator);
         }
@@ -56,6 +58,7 @@ class ConsoleCommandPass implements CompilerPassInterface
         $references = [];
         $configuratorIds = array_keys($commandConfigurators);
         $configuratorIds = array_diff($configuratorIds, [ConfiguratorComposite::class]);
+        /** @var string $serviceId */
         foreach ($configuratorIds as $serviceId) {
             $references[$serviceId] = new Reference($serviceId);
         }

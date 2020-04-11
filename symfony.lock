@@ -5,6 +5,9 @@
     "amphp/byte-stream": {
         "version": "v1.7.3"
     },
+    "beberlei/assert": {
+        "version": "v3.2.7"
+    },
     "composer/semver": {
         "version": "1.5.1"
     },
@@ -47,11 +50,20 @@
     "phpdocumentor/type-resolver": {
         "version": "1.1.0"
     },
+    "phpstan/extension-installer": {
+        "version": "1.0.4"
+    },
     "phpstan/phpdoc-parser": {
         "version": "0.4.3"
     },
     "phpstan/phpstan": {
         "version": "0.12.18"
+    },
+    "phpstan/phpstan-beberlei-assert": {
+        "version": "0.12.2"
+    },
+    "phpstan/phpstan-symfony": {
+        "version": "0.12.5"
     },
     "psr/cache": {
         "version": "1.0.1"
