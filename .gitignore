@@ -14,4 +14,4 @@
 ###< squizlabs/php_codesniffer ###
 
 /m2-cli
-box.phar
+*.phar

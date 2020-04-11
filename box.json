@@ -1,5 +1,5 @@
 {
-    "output": "m2-cli",
+    "output": "m2-cli.phar",
     "main": "bin/m2-cli",
     "force-autodiscovery": true,
     "directories": [
