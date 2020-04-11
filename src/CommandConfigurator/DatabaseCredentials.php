@@ -7,7 +7,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class Database implements ConfiguratorInterface
+class DatabaseCredentials implements ConfiguratorInterface
 {
     /**
      * @var \App\Environment\Database
@@ -21,13 +21,6 @@ class Database implements ConfiguratorInterface
 
     public function configureCommand(Command $command): void
     {
-        $command->addOption(
-            'db-name',
-            null,
-            InputOption::VALUE_REQUIRED,
-            'Database username',
-            $this->config->getDatabase()
-        );
         $command->addOption(
             'db-username',
             null,
@@ -71,7 +64,6 @@ class Database implements ConfiguratorInterface
         if (is_string($password) && !in_array($password, ['<hidden>', '<empty>'])) {
             $this->config->setPassword($password);
         }
-        $this->config->setDatabase($input->getOption('db-name'));
         $this->config->setHost($input->getOption('db-host'));
         $port = $input->getOption('db-port');
         $this->config->setPort((int)$port);

@@ -20,6 +20,6 @@ class ProjectName
 
     public function get(): string
     {
-        return str_replace(' ', '-', $this->directoryName->get());
+        return strtolower(str_replace(' ', '-', $this->directoryName->get()));
     }
 }

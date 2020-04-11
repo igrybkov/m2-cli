@@ -14,7 +14,7 @@ services:
     _instanceof:
         App\CommandConfigurator\ConfiguratorInterface:
             tags: ['app.command_configurator']
-        App\CommandConfigurator\ConfiguratorAwareCommand:
+        App\CommandConfigurator\ConfigurableCommandInterface:
             tags: ['app.configurable_command']
 
     # makes classes in src/ available to be used as services

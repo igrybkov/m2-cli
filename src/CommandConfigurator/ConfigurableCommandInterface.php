@@ -2,7 +2,7 @@
 
 namespace App\CommandConfigurator;
 
-interface ConfiguratorAwareCommand
+interface ConfigurableCommandInterface
 {
     /**
      * Returns list of classes of supported configurators

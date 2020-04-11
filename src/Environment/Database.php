@@ -14,16 +14,17 @@ class Database
     private $password;
     /** @var string */
     private $host;
-    /** @var int */
+    /** @var int|null */
     private $port;
 
     public function __construct(ProjectName $projectName)
     {
-        $this->database = $projectName->get();
-        $this->username = 'root';
-        $this->password = '';
-        $this->host = 'localhost';
-        $this->port = 3306;
+        $mergedConfig = MagentoConfig::merged();
+        $this->database = $mergedConfig->getValue('[db][connection][default][dbname]') ?: $projectName->get();
+        $this->username = $mergedConfig->getValue('[db][connection][default][username]') ?: 'root';;
+        $this->password = $mergedConfig->getValue('[db][connection][default][password]') ?: '';
+        $this->host = $mergedConfig->getValue('[db][connection][default][host]') ?: '127.0.0.1';
+        $this->port = null;
     }
 
     /**
@@ -92,17 +93,17 @@ class Database
     }
 
     /**
-     * @return int
+     * @return int|null
      */
-    public function getPort(): int
+    public function getPort(): ?int
     {
         return $this->port;
     }
 
     /**
-     * @param int $port
+     * @param int|null $port
      */
-    public function setPort(int $port): void
+    public function setPort(?int $port): void
     {
         $this->port = $port;
     }
