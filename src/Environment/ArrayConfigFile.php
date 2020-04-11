@@ -17,7 +17,11 @@ class ArrayConfigFile
         if (!self::isValidArrayConfig($configPath)) {
             return [];
         }
-        return include $configPath;
+        /**
+         * @psalm-suppress UnresolvableInclude
+         * @psalm-suppress MixedReturnStatement
+         */
+        return (array) include $configPath;
     }
 
     public static function write(string $configPath, array $data): void
@@ -32,11 +36,21 @@ class ArrayConfigFile
         return file_exists($configPath) && is_file($configPath);
     }
 
+    /**
+     * @param string $configPath
+     * @return bool
+     */
     public static function isValidArrayConfig(string $configPath): bool
     {
         if (!self::exists($configPath)) {
             return false;
         }
+
+        /**
+         * @psalm-suppress MixedAssignment
+         * @psalm-suppress UnresolvableInclude
+         * @psalm-suppress MixedReturnStatement
+         */
         $data = @include $configPath;
         return is_array($data);
     }

@@ -4,6 +4,7 @@ parameters:
         - bin
         - src
 #        - tests
+    checkMissingIterableValueType: false
     symfony:
         container_xml_path: '%rootDir%/../../../var/cache/dev/App_KernelDevDebugContainer.xml'
         console_application_loader: config/cli_bootstrap.php
