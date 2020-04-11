@@ -1,7 +1,7 @@
 {
     "name": "igrybkov/m2-cli",
-    "description": "Set of Magento 2 CLI helpers to save time",
     "type": "project",
+    "description": "Set of Magento 2 CLI helpers to save time",
     "license": "MIT",
     "authors": [
         {
@@ -12,20 +12,37 @@
     "require": {
         "php": "^7.2.5",
         "ext-ctype": "*",
-        "ext-iconv": "*",
         "beberlei/assert": "^3.2",
+        "symfony/config": "5.0.*",
         "symfony/console": "5.0.*",
+        "symfony/dependency-injection": "5.0.*",
         "symfony/dotenv": "5.0.*",
         "symfony/event-dispatcher": "5.0.*",
+        "symfony/filesystem": "5.0.*",
         "symfony/flex": "^1.3.1",
         "symfony/framework-bundle": "5.0.*",
+        "symfony/http-kernel": "5.0.*",
         "symfony/process": "5.0.*",
         "symfony/property-access": "5.0.*",
+        "symfony/routing": "5.0.*",
         "symfony/var-exporter": "5.0.*",
         "symfony/yaml": "5.0.*"
     },
+    "replace": {
+        "paragonie/random_compat": "2.*",
+        "symfony/polyfill-ctype": "*",
+        "symfony/polyfill-iconv": "*",
+        "symfony/polyfill-php56": "*",
+        "symfony/polyfill-php70": "*",
+        "symfony/polyfill-php71": "*",
+        "symfony/polyfill-php72": "*"
+    },
+    "conflict": {
+        "symfony/symfony": "*"
+    },
     "require-dev": {
         "dealerdirect/phpcodesniffer-composer-installer": "^0.6.2",
+        "ergebnis/composer-normalize": "^2.3",
         "phpcompatibility/php-compatibility": "^9.3",
         "phpstan/extension-installer": "^1.0",
         "phpstan/phpstan": "^0.12.18",
@@ -41,6 +58,12 @@
         },
         "sort-packages": true
     },
+    "extra": {
+        "symfony": {
+            "allow-contrib": false,
+            "require": "5.0.*"
+        }
+    },
     "autoload": {
         "psr-4": {
             "App\\": "src/"
@@ -51,49 +74,31 @@
             "App\\Tests\\": "tests/"
         }
     },
-    "replace": {
-        "paragonie/random_compat": "2.*",
-        "symfony/polyfill-ctype": "*",
-        "symfony/polyfill-iconv": "*",
-        "symfony/polyfill-php72": "*",
-        "symfony/polyfill-php71": "*",
-        "symfony/polyfill-php70": "*",
-        "symfony/polyfill-php56": "*"
-    },
+    "bin": [
+        "bin/console",
+        "bin/m2-cli"
+    ],
     "scripts": {
-        "lint": [
-            "phpcs",
-            "phpstan analyse",
-            "psalm --show-info=true"
-        ],
-        "fix": [
-            "phpcbf"
-        ],
-        "auto-scripts": {
-            "cache:clear": "symfony-cmd"
-        },
-        "post-autoload-dump": [
-            "@dump-env prod",
-            "@auto-scripts"
-        ],
         "post-install-cmd": [
             "@auto-scripts"
         ],
         "post-update-cmd": [
             "@auto-scripts"
+        ],
+        "post-autoload-dump": [
+            "@dump-env prod",
+            "@auto-scripts"
+        ],
+        "auto-scripts": {
+            "cache:clear": "symfony-cmd"
+        },
+        "fix": [
+            "phpcbf"
+        ],
+        "lint": [
+            "phpcs",
+            "phpstan analyse",
+            "psalm --show-info=true"
         ]
-    },
-    "conflict": {
-        "symfony/symfony": "*"
-    },
-    "extra": {
-        "symfony": {
-            "allow-contrib": false,
-            "require": "5.0.*"
-        }
-    },
-    "bin": [
-        "bin/console",
-        "bin/m2-cli"
-    ]
+    }
 }

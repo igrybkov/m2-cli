@@ -1,24 +1,158 @@
 on: [pull_request]
 name: Static analysis
 jobs:
+    phpcs:
+        name: PHP CodeSniffer
+        runs-on: ubuntu-latest
+        steps:
+            -   uses: actions/checkout@v2
+            -   name: Get composer cache directory
+                id: composer-cache
+                run: echo "::set-output name=dir::$(composer config cache-files-dir)"
+
+            -   name: Cache dependencies
+                uses: actions/cache@v1
+                with:
+                    path: ${{ steps.composer-cache.outputs.dir }}
+                    key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+                    restore-keys: ${{ runner.os }}-composer-
+
+            -   name: Install dependencies
+                run: composer install --prefer-dist
+
+            -   name: Setup PHP
+                uses: shivammathur/setup-php@v2
+                with:
+                    php-version: '7.3'
+                    tools: cs2pr
+
+            -   name: PHPCS
+                run: php vendor/bin/phpcs --report=checkstyle | cs2pr
+
     phpstan:
         name: PHPStan
         runs-on: ubuntu-latest
         steps:
             - uses: actions/checkout@v2
-            - name: PHPStan
-              uses: docker://oskarstark/phpstan-ga
-              env:
-                  REQUIRE_DEV: true
+            - name: Get composer cache directory
+              id: composer-cache
+              run: echo "::set-output name=dir::$(composer config cache-files-dir)"
+
+            - name: Cache dependencies
+              uses: actions/cache@v1
               with:
-                args: analyse
+                  path: ${{ steps.composer-cache.outputs.dir }}
+                  key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+                  restore-keys: ${{ runner.os }}-composer-
+
+            - name: Install dependencies
+              run: composer install --prefer-dist
+
+            - name: Setup PHP
+              uses: shivammathur/setup-php@v2
+              with:
+                  php-version: '7.3'
+                  tools: cs2pr
+
+            - name: Warm up Symfony cache
+              run: php bin/console cache:clear
+
+            - name: PHPStan
+              run: php vendor/bin/phpstan analyse src --error-format=checkstyle | cs2pr
 
     psalm:
         name: Psalm
         runs-on: ubuntu-latest
         steps:
-            - name: Checkout code
-              uses: actions/checkout@v2
-
+            - uses: actions/checkout@v2
+            - name: Get composer cache directory
+              id: composer-cache
+              run: echo "::set-output name=dir::$(composer config cache-files-dir)"
+            - name: Cache dependencies
+              uses: actions/cache@v1
+              with:
+                  path: ${{ steps.composer-cache.outputs.dir }}
+                  key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+                  restore-keys: ${{ runner.os }}-composer-
+            - name: Install dependencies
+              run: composer install --prefer-dist
+            - name: Setup PHP
+              uses: shivammathur/setup-php@v2
+              with:
+                  php-version: '7.3'
+                  tools: cs2pr
             - name: Psalm
-              uses: docker://vimeo/psalm-github-actions
+              run: php vendor/bin/psalm --output-format=github --no-progress
+
+    composer-unused:
+        name: Composer Unused
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v2
+            - name: Get composer cache directory
+              id: composer-cache
+              run: echo "::set-output name=dir::$(composer config cache-files-dir)"
+            - name: Cache dependencies
+              uses: actions/cache@v1
+              with:
+                  path: ${{ steps.composer-cache.outputs.dir }}
+                  key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+                  restore-keys: ${{ runner.os }}-composer-
+            - name: Install dependencies
+              run: composer install --prefer-dist
+            - name: Setup PHP
+              uses: shivammathur/setup-php@v2
+              with:
+                  php-version: '7.3'
+            - name: Composer Unused
+              uses: docker://icanhazstring/composer-unused-ga
+
+    composer-require-checker:
+        name: Composer Require Checker
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v2
+            - name: Get composer cache directory
+              id: composer-cache
+              run: echo "::set-output name=dir::$(composer config cache-files-dir)"
+            - name: Cache dependencies
+              uses: actions/cache@v1
+              with:
+                  path: ${{ steps.composer-cache.outputs.dir }}
+                  key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+                  restore-keys: ${{ runner.os }}-composer-
+            - name: Install dependencies
+              run: composer install --prefer-dist
+            - name: Setup PHP
+              uses: shivammathur/setup-php@v2
+              with:
+                  php-version: '7.3'
+            - name: Install checker
+              run: wget https://github.com/maglnet/ComposerRequireChecker/releases/download/2.1.0/composer-require-checker.phar
+            - name: Composer Require Checker
+              run: php composer-require-checker.phar check composer.json
+
+    composer-normalize:
+        name: "composer-normalize"
+
+        runs-on: "ubuntu-latest"
+
+        steps:
+            - uses: actions/checkout@v2
+            - name: Get composer cache directory
+              id: composer-cache
+              run: echo "::set-output name=dir::$(composer config cache-files-dir)"
+            - name: Cache dependencies
+              uses: actions/cache@v1
+              with:
+                  path: ${{ steps.composer-cache.outputs.dir }}
+                  key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+                  restore-keys: ${{ runner.os }}-composer-
+            - name: Install dependencies
+              run: composer install --prefer-dist
+            - name: Setup PHP
+              uses: shivammathur/setup-php@v2
+              with:
+                  php-version: '7.3'
+            - name: "Run composer normalize"
+              uses: "docker://ergebnis/composer-normalize-action:latest"
