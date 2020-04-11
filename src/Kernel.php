@@ -23,9 +23,12 @@ class Kernel extends BaseKernel
      */
     public function registerBundles(): iterable
     {
+        /** @var array<array> $contents */
         $contents = require $this->getProjectDir() . '/config/bundles.php';
+        /** @var array<array> $envs */
         foreach ($contents as $class => $envs) {
             if ($envs[$this->environment] ?? $envs['all'] ?? false) {
+                /** @psalm-suppress UndefinedClass */
                 yield new $class();
             }
         }
@@ -33,13 +36,13 @@ class Kernel extends BaseKernel
 
     public function getProjectDir(): string
     {
-        return \dirname(__DIR__);
+        return dirname(__DIR__);
     }
 
     protected function configureContainer(ContainerBuilder $container, LoaderInterface $loader): void
     {
         $container->addResource(new FileResource($this->getProjectDir() . '/config/bundles.php'));
-        $container->setParameter('container.dumper.inline_class_loader', \PHP_VERSION_ID < 70400 || $this->debug);
+        $container->setParameter('container.dumper.inline_class_loader', PHP_VERSION_ID < 70400 || $this->debug);
         $container->setParameter('container.dumper.inline_factories', true);
         $confDir = $this->getProjectDir() . '/config';
 
