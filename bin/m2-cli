@@ -2,6 +2,9 @@
 <?php
 
 putenv('APP_M2_CLI=1');
+//putenv('APP_ENV=prod');
+
+echo getenv('APP_ENV');
 
 /** @var \Symfony\Bundle\FrameworkBundle\Console\Application $application */
 $application = require dirname(__DIR__).'/config/cli_bootstrap.php';
