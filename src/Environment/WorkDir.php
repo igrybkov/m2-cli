@@ -6,7 +6,7 @@ use Assert\Assert;
 
 class WorkDir
 {
-    public function getPath(): string
+    public static function getPath(): string
     {
         $path = getcwd();
         Assert::that($path)->string();

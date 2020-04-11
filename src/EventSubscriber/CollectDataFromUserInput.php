@@ -7,7 +7,7 @@ use Symfony\Component\Console\ConsoleEvents;
 use Symfony\Component\Console\Event\ConsoleCommandEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
-class DisableInternalCommandsForM2Cli implements EventSubscriberInterface
+class CollectDataFromUserInput implements EventSubscriberInterface
 {
     /**
      * @var ConfiguratorComposite
@@ -26,12 +26,12 @@ class DisableInternalCommandsForM2Cli implements EventSubscriberInterface
     {
         return [
             ConsoleEvents::COMMAND => [
-                ['updateConfiguration', 10]
+                ['collect', 10]
             ]
         ];
     }
 
-    public function updateConfiguration(ConsoleCommandEvent $event): void
+    public function collect(ConsoleCommandEvent $event): void
     {
         $command = $event->getCommand();
         if ($command) {

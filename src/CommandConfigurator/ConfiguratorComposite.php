@@ -25,7 +25,7 @@ class ConfiguratorComposite implements ConfiguratorInterface
 
     public function configureCommand(Command $command): void
     {
-        if ($command instanceof ConfiguratorAwareCommand) {
+        if ($command instanceof ConfigurableCommandInterface) {
             foreach ($command->getConfiguratorsList() as $name) {
                 if (isset($this->configurators[$name])) {
                     $this->configurators[$name]->configureCommand($command);
@@ -36,7 +36,7 @@ class ConfiguratorComposite implements ConfiguratorInterface
 
     public function collectUserInput(InputInterface $input, OutputInterface $output, Command $command): void
     {
-        if ($command instanceof ConfiguratorAwareCommand) {
+        if ($command instanceof ConfigurableCommandInterface) {
             foreach ($command->getConfiguratorsList() as $name) {
                 if (isset($this->configurators[$name])) {
                     $this->configurators[$name]->collectUserInput($input, $output, $command);
