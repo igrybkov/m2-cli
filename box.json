@@ -1,10 +1,12 @@
 {
     "output": "m2-cli",
+    "main": "bin/m2-cli",
     "force-autodiscovery": true,
     "directories": [
         "config"
     ],
     "files": [
+        "bin/console",
         ".env.local.php"
     ],
     "blacklist": [

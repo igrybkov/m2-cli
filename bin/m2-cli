@@ -1,6 +1,12 @@
 #!/usr/bin/env php
 <?php
 
+putenv('APP_M2_CLI=1');
+
 /** @var \Symfony\Bundle\FrameworkBundle\Console\Application $application */
 $application = require dirname(__DIR__).'/config/cli_bootstrap.php';
+
+$application->setName('M2-Cli');
+$application->setVersion('1.0.0');
+
 $application->run($input);
