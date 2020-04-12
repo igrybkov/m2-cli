@@ -10,7 +10,7 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class DbDrop extends Command implements ConfigurableCommandInterface
+class DbRecreate extends Command implements ConfigurableCommandInterface
 {
     /**
      * @var Database
@@ -30,18 +30,24 @@ class DbDrop extends Command implements ConfigurableCommandInterface
 
     protected function configure(): void
     {
-        $this->setName('db:drop');
-        $this->setDescription('Drop database');
+        $this->setName('db:recreate');
+        $this->setDescription('Recreate database');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $createError = $this->databaseManagement->create($this->database->getDatabase());
+        if (null !== $createError) {
+            $output->writeln(sprintf("<error>Cannot create database: %s</error>", $createError));
+            return 1;
+        }
         $dropError = $this->databaseManagement->drop($this->database->getDatabase());
         if (null !== $dropError) {
             $output->writeln(sprintf("<error>Cannot drop database: %s</error>", $dropError));
             return 1;
         }
-        $output->writeln('Database created.');
+
+        $output->writeln('Database re-created.');
         return 0;
     }
 
