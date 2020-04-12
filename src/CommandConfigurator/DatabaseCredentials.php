@@ -3,6 +3,7 @@
 namespace App\CommandConfigurator;
 
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Event\ConsoleCommandEvent;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -55,10 +56,15 @@ class DatabaseCredentials implements ConfiguratorInterface
      * @param InputInterface $input
      * @param OutputInterface $output
      * @param Command $command
+     * @param ConsoleCommandEvent $event
      * @psalm-suppress PossiblyInvalidArgument
      */
-    public function collectUserInput(InputInterface $input, OutputInterface $output, Command $command): void
-    {
+    public function collectUserInput(
+        InputInterface $input,
+        OutputInterface $output,
+        Command $command,
+        ConsoleCommandEvent $event
+    ): void {
         $this->config->setUsername($input->getOption('db-username'));
         $password = $input->getOption('db-password');
         if (is_string($password) && !in_array($password, ['<hidden>', '<empty>'])) {
