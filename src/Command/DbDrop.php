@@ -10,7 +10,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Process\Process;
 
-class DbCreate extends Command implements ConfigurableCommandInterface
+class DbDrop extends Command implements ConfigurableCommandInterface
 {
     /**
      * @var Database
@@ -25,14 +25,14 @@ class DbCreate extends Command implements ConfigurableCommandInterface
 
     protected function configure(): void
     {
-        $this->setName('db:create');
-        $this->setDescription('Create database');
+        $this->setName('db:drop');
+        $this->setDescription('Drop database');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $process = new Process(['mysql']);
-        $process->setInput(sprintf("create database if not exists`%s`;", $this->database->getDatabase()));
+        $process->setInput(sprintf("drop database if exists`%s`;", $this->database->getDatabase()));
         $process->run();
 
         $exitCode = (int)$process->getExitCode();

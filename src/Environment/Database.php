@@ -17,11 +17,16 @@ class Database
     /** @var int|null */
     private $port;
 
+    /**
+     * Database constructor.
+     * @param ProjectName $projectName
+     * @psalm-suppress MixedAssignment
+     */
     public function __construct(ProjectName $projectName)
     {
         $mergedConfig = MagentoConfig::merged();
         $this->database = $mergedConfig->getValue('[db][connection][default][dbname]') ?: $projectName->get();
-        $this->username = $mergedConfig->getValue('[db][connection][default][username]') ?: 'root';;
+        $this->username = $mergedConfig->getValue('[db][connection][default][username]') ?: 'root';
         $this->password = $mergedConfig->getValue('[db][connection][default][password]') ?: '';
         $this->host = $mergedConfig->getValue('[db][connection][default][host]') ?: '127.0.0.1';
         $this->port = null;

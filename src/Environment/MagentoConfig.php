@@ -4,9 +4,14 @@ namespace App\Environment;
 
 class MagentoConfig
 {
+    /**
+     * @var self[]
+     */
     private static $instances = [];
 
-    private $isFileExists;
+    /**
+     * @var ArrayConfigData
+     */
     private $data;
     /**
      * @var string
@@ -15,25 +20,18 @@ class MagentoConfig
 
     public function __construct(string $file)
     {
-        $this->isFileExists = ArrayConfigFile::isValidArrayConfig($file);
         $this->data = ArrayConfigData::fromConfig(ArrayConfigFile::read($file));
         $this->path = $file;
     }
 
-    public function data()
+    public function data(): ArrayConfigData
     {
         return $this->data;
     }
 
-    public function isFileExists()
+    public function write(): void
     {
-        return $this->isFileExists;
-    }
-
-    public function write()
-    {
-        ArrayConfigFile::write($this->path, $this->data->getValue('.'));
-        $this->isFileExists = true;
+        ArrayConfigFile::write($this->path, (array)$this->data->getValue('.'));
     }
 
     public static function env(): self
@@ -56,9 +54,9 @@ class MagentoConfig
 
     public static function merged(): ArrayConfigData
     {
-        // don't cache it to keep it always up to date
-        $mergedConfig = ArrayConfigData::fromConfig(self::config()->data()->getValue('.'));
-        $mergedConfig->merge(self::env()->data()->getValue('.'));
+        // don't cache merged config to keep it always up to date
+        $mergedConfig = ArrayConfigData::fromConfig((array)self::config()->data()->getValue('.'));
+        $mergedConfig->merge((array)self::env()->data()->getValue('.'));
         return $mergedConfig;
     }
 }

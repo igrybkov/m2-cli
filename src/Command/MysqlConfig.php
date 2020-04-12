@@ -28,7 +28,7 @@ class MysqlConfig extends Command implements ConfigurableCommandInterface
         $this->filesystem = $filesystem;
     }
 
-    protected function configure()
+    protected function configure(): void
     {
         $this->setName('mysql:config');
         $this->setDescription('Configure MySql client');
@@ -38,7 +38,7 @@ class MysqlConfig extends Command implements ConfigurableCommandInterface
 Helps configure my.cnf in user's home directory <comment>(${configPath})</comment> to use mysql client without password.
 
 Defaults values are pre-filled with values from Magento installation in current directory.
-So if you have Magento installation with correct database credentials, you only need to run this command without parameters.
+So if you have Magento with correct database credentials, you only need to run this command without parameters.
 
 It does not override or delete existing options in my.cnf unless they were changed in this command.
 
@@ -53,6 +53,12 @@ HELP
         );
     }
 
+    /**
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     * @return int
+     * @psalm-suppress MixedArrayAssignment
+     */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $configData = [];
@@ -74,6 +80,13 @@ HELP
         return 0;
     }
 
+    /**
+     * @param array $data
+     * @return string
+     * @psalm-suppress MixedArrayAssignment
+     * @psalm-suppress MixedAssignment
+     * @psalm-suppress MixedOperand
+     */
     private function convertToINI(array $data): string
     {
         $output = '';
@@ -81,6 +94,7 @@ HELP
         $values = [];
         $sections = [];
 
+        /** @var array|string|int|float $item */
         foreach ($data as $option => $item) {
             if (is_array($item)) {
                 $sections[$option] = $item;
@@ -103,12 +117,7 @@ HELP
 
     private function getConfigPath(): string
     {
-        return getenv('HOME') . '/.my.cnf';
-    }
-
-    protected function interact(InputInterface $input, OutputInterface $output)
-    {
-        parent::interact($input, $output);
+        return (getenv('HOME') ?: '~') . '/.my.cnf';
     }
 
     public function getConfiguratorsList(): array

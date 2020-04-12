@@ -17,11 +17,26 @@
     "dealerdirect/phpcodesniffer-composer-installer": {
         "version": "v0.6.2"
     },
+    "ergebnis/composer-normalize": {
+        "version": "2.3.2"
+    },
+    "ergebnis/json-normalizer": {
+        "version": "0.11.0"
+    },
+    "ergebnis/json-printer": {
+        "version": "3.0.2"
+    },
     "felixfbecker/advanced-json-rpc": {
         "version": "v3.1.1"
     },
     "felixfbecker/language-server-protocol": {
         "version": "v1.4.0"
+    },
+    "justinrainbow/json-schema": {
+        "version": "5.2.9"
+    },
+    "localheinz/diff": {
+        "version": "1.0.1"
     },
     "netresearch/jsonmapper": {
         "version": "v1.6.0"
@@ -190,6 +205,9 @@
     },
     "symfony/polyfill-php73": {
         "version": "v1.15.0"
+    },
+    "symfony/process": {
+        "version": "v5.0.7"
     },
     "symfony/property-access": {
         "version": "v5.0.7"
