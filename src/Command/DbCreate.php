@@ -3,6 +3,7 @@
 namespace App\Command;
 
 use App\CommandConfigurator\ConfigurableCommandInterface;
+use App\CommandConfigurator\DangerousCommand;
 use App\CommandConfigurator\DatabaseName;
 use App\Environment\Database;
 use App\Service\DatabaseManagement;
@@ -47,6 +48,6 @@ class DbCreate extends Command implements ConfigurableCommandInterface
 
     public function getConfiguratorsList(): array
     {
-        return [DatabaseName::class];
+        return [DatabaseName::class, DangerousCommand::class];
     }
 }

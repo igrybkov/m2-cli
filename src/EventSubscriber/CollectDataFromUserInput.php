@@ -35,7 +35,7 @@ class CollectDataFromUserInput implements EventSubscriberInterface
     {
         $command = $event->getCommand();
         if ($command) {
-            $this->configuratorComposite->collectUserInput($event->getInput(), $event->getOutput(), $command);
+            $this->configuratorComposite->collectUserInput($event->getInput(), $event->getOutput(), $command, $event);
         }
     }
 }
